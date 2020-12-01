@@ -16,7 +16,7 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.converter.Converters;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ARGBType;
-import net.imglib2.type.numeric.IntegerType;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -72,7 +72,7 @@ public class N5Tutorial4 implements Callable<Void> {
 	 * @param <T>
 	 * @throws IOException
 	 */
-	private final <T extends NativeType<T> & IntegerType<T>> void run() throws IOException {
+	private final <T extends NativeType<T> & RealType<T>> void run() throws IOException {
 
 		/* make an N5 reader, we start with a public container on AWS S3 */
 		final N5Reader n5 = N5Factory.openAWSS3Reader(n5Url);

@@ -32,21 +32,21 @@ public class LazyTutorial1 implements Callable<Void> {
 
 	@Option(
 			names = {"-i", "--n5url"},
-			required = false,
+			required = true,
 			description = "N5 URL, e.g. 'https://janelia-cosem.s3.amazonaws.com/jrc_hela-2/jrc_hela-2.n5'")
-	private String n5Url = "https://janelia-cosem.s3.amazonaws.com/jrc_hela-2/jrc_hela-2.n5";
+	private String n5Url = null;
 
 	@Option(
 			names = {"-d", "--n5dataset"},
-			required = false,
+			required = true,
 			description = "N5 dataset, e.g. '/em/fibsem-uint16/s4'")
-	private String n5Dataset = "/em/fibsem-uint16/s2";
+	private String n5Dataset = null;
 
 	@Option(
 			names = {"-s", "--scaleindex"},
-			required = false,
+			required = true,
 			description = "scale index, e.g. 4")
-	private int scaleIndex = 4;
+	private int scaleIndex = 0;
 
 	/**
 	 * Start the tool.  We ignore the exit code returned by
@@ -81,10 +81,10 @@ public class LazyTutorial1 implements Callable<Void> {
 
 		final SharedQueue queue = new SharedQueue(Math.max(1, Runtime.getRuntime().availableProcessors() / 2));
 
-		final double scale = 1.0 / Math.pow(2, scaleIndex);
 		final N5Reader n5 = N5Factory.openAWSS3Reader(n5Url);
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);
 
+		final double scale = 1.0 / Math.pow(2, scaleIndex);
 		final int blockRadius = (int)Math.round(1023 * scale);
 
 		/* Use the ImageJ CLAHE plugin */

@@ -15,7 +15,6 @@ import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.NativeType;
-import net.imglib2.type.numeric.IntegerType;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 import picocli.CommandLine;
@@ -95,7 +94,7 @@ public class N5Tutorial2 implements Callable<Void> {
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	private final <T extends NativeType<T> & IntegerType<T>> void run() throws IOException, InterruptedException, ExecutionException {
+	private final <T extends NativeType<T>> void run() throws IOException, InterruptedException, ExecutionException {
 
 		final Timer timer = new Timer();
 

@@ -13,7 +13,6 @@ import bdv.util.volatiles.VolatileViews;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.Volatile;
 import net.imglib2.type.NativeType;
-import net.imglib2.type.numeric.IntegerType;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -68,7 +67,7 @@ public class N5Tutorial3 implements Callable<Void> {
 	 * @param <T>
 	 * @throws IOException
 	 */
-	private final <T extends NativeType<T> & IntegerType<T>> void run() throws IOException {
+	private final <T extends NativeType<T>> void run() throws IOException {
 
 		/* make an N5 reader, we start with a public container on AWS S3 */
 		final N5Reader n5 = N5Factory.openReader(n5Url);
