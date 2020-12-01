@@ -93,5 +93,4 @@ public interface Functions {
 				centerGradient(Views.extendMirrorSingle(source), d),
 				source);
 	}
-
 }
