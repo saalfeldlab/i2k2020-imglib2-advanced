@@ -268,7 +268,7 @@ public interface N5Factory {
 			else if (scheme.equals("gs"))
 				return openGoogleCloudReader(url);
 			else if (scheme.equals("https") || scheme.equals("http")) {
-				if (uri.getHost().matches(".*\s3\\.amazonaws\\.com"))
+				if (uri.getHost().matches(".*s3\\.amazonaws\\.com"))
 					return openAWSS3Reader(url);
 				else if (uri.getHost().matches(".*cloud\\.google\\.com"))
 					return openGoogleCloudReader(url);
@@ -300,7 +300,7 @@ public interface N5Factory {
 			else if (scheme.equals("gs"))
 				return openGoogleCloudWriter(url, null);
 			else if (scheme.equals("https") || scheme.equals("http")) {
-				if (uri.getHost().matches(".*\s3\\.amazonaws\\.com"))
+				if (uri.getHost().matches(".*s3\\.amazonaws\\.com"))
 					return openAWSS3Writer(url);
 				else if (uri.getHost().matches(".*cloud\\.google\\.com"))
 					return openGoogleCloudWriter(url, null);
