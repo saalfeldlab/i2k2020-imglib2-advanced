@@ -1,4 +1,4 @@
-HowTo build libblosc on MacIS:
+HowTo build libblosc on MacOS:
 
 - Download & install CMake (https://cmake.org/download/)
 
