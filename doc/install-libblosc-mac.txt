@@ -1,0 +1,29 @@
+HowTo build libblosc on MacOS:
+
+- Download & install CMake (https://cmake.org/download/)
+
+- Add CMake to the command line path:
+	PATH="/Applications/CMake.app/Contents/bin":"$PATH"
+
+- Install the CMake command line tools
+	sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install
+
+(Alternatively you can use HomeBrew for the above steps)
+
+- Clone c-blosc from https://github.com/Blosc/c-blosc
+
+	git clone https://github.com/Blosc/c-blosc.git
+
+- Follow the next steps as described on the GitHub page:
+
+	cd c-blosc
+	mkdir build
+	cd build
+	
+	cmake -DCMAKE_INSTALL_PREFIX=/usr/local .. 
+	
+	cmake-gui ..   # run a graphical interface to configure (optional)
+	
+	cmake --build .
+	ctest
+	sudo cmake --build . --target install
