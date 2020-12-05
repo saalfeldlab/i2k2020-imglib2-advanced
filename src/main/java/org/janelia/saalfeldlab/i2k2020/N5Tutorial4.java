@@ -99,6 +99,7 @@ public class N5Tutorial4 implements Callable<Void> {
 		/* gradients Z */
 		final RandomAccessibleInterval<DoubleType> gradientZ = Functions.centerGradientRAI(imgDoubles, 2);
 
+
 		bdv = BdvFunctions.show(
 				VolatileViews.wrapAsVolatile(
 						Caches.cache(gradientX, 16, 16, 16)),

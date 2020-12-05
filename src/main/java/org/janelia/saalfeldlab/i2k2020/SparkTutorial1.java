@@ -1,5 +1,6 @@
 package org.janelia.saalfeldlab.i2k2020;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -118,7 +119,7 @@ public class SparkTutorial1 implements Callable<Void> {
 			final String n5OutUrl,
 			final String n5OutDataset,
 			final int blockRadius,
-			final JavaRDD<long[][]> rddGrid) {
+			final JavaRDD<long[][]> rddGrid) throws IOException {
 
 		rddGrid.foreach(gridBlock -> {
 
@@ -133,7 +134,7 @@ public class SparkTutorial1 implements Callable<Void> {
 							blockRadius,
 							0,
 							65535);
-			final RandomAccessibleInterval<T> cllcned = Lazy.process(
+			final RandomAccessibleInterval<T> cllcned = Lazy.generate(
 					img,
 					new int[] {256, 256, 32},
 					img.randomAccess().get().createVariable(),

@@ -120,7 +120,7 @@ public interface Lazy {
 	 * @param op
 	 * @return
 	 */
-	public static <T extends NativeType<T>> CachedCellImg<T, ?> process(
+	public static <T extends NativeType<T>> CachedCellImg<T, ?> generate(
 			final Interval targetInterval,
 			final int[] blockSize,
 			final T type,

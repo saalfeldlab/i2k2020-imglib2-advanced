@@ -24,7 +24,6 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.Volatile;
 import net.imglib2.converter.Converters;
 import net.imglib2.img.basictypeaccess.AccessFlags;
-import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -119,7 +118,7 @@ public class LazyTutorial2 implements Callable<Void> {
 					Arrays.toString(sigmaSeries[2][i]));
 		}
 
-		final N5Reader n5 = N5Factory.openAWSS3Reader(n5Url);
+		final N5Reader n5 = N5Factory.openReader(n5Url);
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);
 
 		final RandomAccessibleInterval<DoubleType> converted =
@@ -136,7 +135,7 @@ public class LazyTutorial2 implements Callable<Void> {
 		for (int i = 0; i < scaleSteps; ++i) {
 			final SimpleGaussRA<DoubleType> op = new SimpleGaussRA<>(sigmaSeries[2][i]);
 			op.setInput(source);
-			final RandomAccessibleInterval<DoubleType> smoothed = Lazy.process(
+			final RandomAccessibleInterval<DoubleType> smoothed = Lazy.generate(
 					img,
 					blockSize,
 					new DoubleType(),
@@ -159,23 +158,23 @@ public class LazyTutorial2 implements Callable<Void> {
 								Views.extendBorder(scales.get(i)),
 								d,
 								sigmaSeries[0][i][d]);
-				final RandomAccessibleInterval<DoubleType> gradient = Lazy.process(img, blockSize, new DoubleType(), AccessFlags.setOf(), gradientOp);
+				final RandomAccessibleInterval<DoubleType> gradient = Lazy.generate(img, blockSize, new DoubleType(), AccessFlags.setOf(), gradientOp);
 				gradients[d] = Views.extendZero(gradient);
 			}
 
 			/* tubeness */
 			final TubenessCenter<DoubleType> tubenessOp = new TubenessCenter<>(gradients, sigmaSeries[0][i]);
-			final RandomAccessibleInterval<DoubleType> tubeness = Lazy.process(img, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), tubenessOp);
+			final RandomAccessibleInterval<DoubleType> tubeness = Lazy.generate(img, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), tubenessOp);
 			results.add(tubeness); // works without extension because the size is the same as max output
 		}
 
 		/* max project scale space of tubeness */
 		final Max<DoubleType> maxOp = new Max<>(results);
-		final RandomAccessibleInterval<DoubleType> scaleTubeness = Lazy.process(img, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), maxOp);
+		final RandomAccessibleInterval<DoubleType> scaleTubeness = Lazy.generate(img, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), maxOp);
 
 		/* multiply with intensities */
 		final Multiply<DoubleType> mulOp = new Multiply<>(scaleTubeness, source);
-		final RandomAccessibleInterval<DoubleType> multipliedTubeness = Lazy.process(scaleTubeness, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), mulOp);		
+		final RandomAccessibleInterval<DoubleType> multipliedTubeness = Lazy.generate(scaleTubeness, blockSize, new DoubleType(), AccessFlags.setOf(AccessFlags.VOLATILE), mulOp);
 
 		BdvOptions options = BdvOptions.options();
 		for (final RandomAccessibleInterval<DoubleType> result : results) {

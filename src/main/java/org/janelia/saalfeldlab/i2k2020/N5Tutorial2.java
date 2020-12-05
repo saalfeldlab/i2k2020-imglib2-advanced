@@ -33,7 +33,7 @@ public class N5Tutorial2 implements Callable<Void> {
 	@Option(
 			names = {"-d", "--n5dataset"},
 			required = true,
-			description = "N5 dataset, e.g. '/em/fibsem-uint16/s4'")
+			description = "N5 dataset, e.g. '/em/fibsem-uint16/s0'")
 	private String n5Dataset = null;
 
 	@Option(
