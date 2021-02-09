@@ -95,33 +95,30 @@ public class N5Tutorial1 implements Callable<Void> {
 		/* save this dataset into a filsystem Zarr container */
 		System.out.println("Copy to Zarr filesystem...");
 		timer.start();
-		final N5Writer zarrOut = N5Factory.openZarrWriter(n5OutUrl + ".zarr");
-//		N5Utils.save(img, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
-		N5Utils.save(img, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		try (final N5Writer zarrOut = N5Factory.openZarrWriter(n5OutUrl + ".zarr")) {
+//			N5Utils.save(img, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
+			N5Utils.save(img, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		}
 		System.out.println("...done in " + timer.stop() + "ms.");
 
 		/* save this dataset into a filsystem N5 container */
 		System.out.println("Copy to N5 filesystem...");
 		timer.start();
-		final N5Writer n5Out = N5Factory.openFSWriter(n5OutUrl + ".n5");
-//		N5Utils.save(img, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
-		N5Utils.save(img, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		try (final N5Writer n5Out = N5Factory.openFSWriter(n5OutUrl + ".n5")) {
+//			N5Utils.save(img, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
+			N5Utils.save(img, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		}
 		System.out.println("...done in " + timer.stop() + "ms.");
 
 		/* save this dataset into an HDF5 file */
 		System.out.println("Copy to HDF5...");
 		timer.start();
-		final N5Writer hdf5Out = N5Factory.openHDF5Writer(n5OutUrl + ".hdf5", attributes.getBlockSize());
-//		N5Utils.save(img, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
-		N5Utils.save(img, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		try (final N5Writer hdf5Out = N5Factory.openHDF5Writer(n5OutUrl + ".hdf5", attributes.getBlockSize())) {
+//			N5Utils.save(img, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
+			N5Utils.save(img, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
+		}
 		System.out.println("...done in " + timer.stop() + "ms.");
 
 		exec.shutdown();
-	}
-
-	private Object N5Utils(final String n5Url2, final String n5Dataset2) {
-
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
