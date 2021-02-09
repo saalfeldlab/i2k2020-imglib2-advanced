@@ -18,6 +18,7 @@ import org.janelia.saalfeldlab.neubias.util.Lazy;
 import org.janelia.saalfeldlab.neubias.util.N5Factory;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.converter.Converters;
 import net.imglib2.img.basictypeaccess.AccessFlags;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
@@ -28,8 +29,8 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@Command(name = "neubias-tutorial-spark-1")
-public class SparkTutorial1 implements Callable<Void> {
+@Command(name = "i2k2020-tutorial-spark-2")
+public class SparkTutorial2 implements Callable<Void> {
 
 	@Option(
 			names = {"-i", "--n5url"},
@@ -62,7 +63,7 @@ public class SparkTutorial1 implements Callable<Void> {
 	private int scaleIndex = 0;
 
 	/**
-	 * Start the tool.  We ignore the exit code returned by
+	 * Start the tool. We ignore the exit code returned by
 	 * {@link CommandLine#execute(String...)} but this can be useful in other
 	 * applications.
 	 *
@@ -74,7 +75,7 @@ public class SparkTutorial1 implements Callable<Void> {
 	}
 
 	/**
-	 * The real implementation.  We use {@link Callable Callable<Void>} instead
+	 * The real implementation. We use {@link Callable Callable<Void>} instead
 	 * of {@link Runnable} because {@link Runnable#run()} cannot throw
 	 * {@link Exception Exceptions}.
 	 *
@@ -126,17 +127,32 @@ public class SparkTutorial1 implements Callable<Void> {
 			final N5Reader n5 = N5Factory.openReader(n5Url);
 			final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
 
-			/* Use the new ImageJ plugin contrast limited local contrast normalization */
-			final ImageJStackOp<T> cllcn =
-					new ImageJStackOp<>(
-							Views.extendZero(img),
-							(fp) -> new CLLCN(fp).run(blockRadius, blockRadius, 3f, 10, 0.5f, true, true, true),
-							blockRadius,
-							0,
-							65535);
+			final T type = Util.getTypeFromInterval(img);
+
+			final RandomAccessibleInterval<T> imgConv = Converters.convert(
+					img,
+					(a, b) -> {
+						final double v = a.getRealDouble();
+						if (v < 18000)
+							b.setReal(27000);
+						else
+							b.setReal(v);
+					},
+					type);
+
+			/*
+			 * Use the new ImageJ plugin contrast limited local contrast
+			 * normalization
+			 */
+			final ImageJStackOp<T> cllcn = new ImageJStackOp<>(
+					Views.extendZero(imgConv),
+					(fp) -> new CLLCN(fp).run(blockRadius, blockRadius, 3f, 10, 0.5f, true, true, true),
+					blockRadius,
+					0,
+					65535);
 			final RandomAccessibleInterval<T> cllcned = Lazy.generate(
 					img,
-					new int[] {256, 256, 32},
+					new int[]{256, 256, 32},
 					img.randomAccess().get().createVariable(),
 					AccessFlags.setOf(AccessFlags.VOLATILE),
 					cllcn);

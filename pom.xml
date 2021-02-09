@@ -24,6 +24,7 @@
 		<n5-zarr.version>0.0.6</n5-zarr.version>
 		<n5-jpeg.version>0.0.1-beta1</n5-jpeg.version>
 		<n5-google-cloud.version>3.3.1</n5-google-cloud.version>
+		<n5-spark.version>3.7.2</n5-spark.version>
 	</properties>
 
 	<repositories>
@@ -70,6 +71,11 @@
 		<dependency>
 			<groupId>org.janelia.saalfeldlab</groupId>
 			<artifactId>n5-zarr</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.janelia.saalfeldlab</groupId>
+			<artifactId>n5-spark</artifactId>
+			<version>${n5-spark.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>info.picocli</groupId>
