@@ -155,7 +155,7 @@ public class SparkTutorial3 implements Callable<Void> {
 				.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer"))) {
 
 			final N5WriterSupplier n5Supplier = () -> {
-				return N5Factory.openWriter(n5Path);
+				return new N5Factory().openWriter(n5Path);
 			};
 
 			if (outputGroupPath != null) {

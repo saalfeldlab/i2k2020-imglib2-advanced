@@ -37,7 +37,7 @@ public class N5Tutorial1 {
 		final String n5Dataset = "/em/fibsem-uint16/s4";
 
 		/* make an N5 reader, we start with a public container on AWS S3 */
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 
 		/* open dataset */
 		final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);

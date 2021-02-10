@@ -87,12 +87,14 @@ public class SparkTutorial1 implements Callable<Void> {
 		final SparkConf conf = new SparkConf().setAppName(this.getClass().getName());
 		final JavaSparkContext sc = new JavaSparkContext(conf);
 
+		final N5Factory n5Factory = new N5Factory();
+
 		/* get some data about the input */
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = n5Factory.openReader(n5Url);
 		final DatasetAttributes attributes = n5.getDatasetAttributes(n5Dataset);
 
 		/* create the output */
-		final N5Writer n5Writer = N5Factory.openWriter(n5OutUrl);
+		final N5Writer n5Writer = n5Factory.openWriter(n5OutUrl);
 		n5Writer.createDataset(n5OutDataset, attributes);
 
 		/* create the grid for parallelization */
@@ -121,9 +123,11 @@ public class SparkTutorial1 implements Callable<Void> {
 			final int blockRadius,
 			final JavaRDD<long[][]> rddGrid) throws IOException {
 
+		final N5Factory n5Factory = new N5Factory();
+
 		rddGrid.foreach(gridBlock -> {
 
-			final N5Reader n5 = N5Factory.openReader(n5Url);
+			final N5Reader n5 = n5Factory.openReader(n5Url);
 			final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
 
 			/* Use the new ImageJ plugin contrast limited local contrast normalization */
@@ -144,7 +148,7 @@ public class SparkTutorial1 implements Callable<Void> {
 			/* crop the block of interest */
 			final IntervalView<T> block = Views.offsetInterval(cllcned, gridBlock[0], gridBlock[1]);
 
-			final N5Writer n5Writer = N5Factory.openWriter(n5OutUrl);
+			final N5Writer n5Writer = n5Factory.openWriter(n5OutUrl);
 			N5Utils.saveNonEmptyBlock(block, n5Writer, n5OutDataset, gridBlock[2], Util.getTypeFromInterval(img).createVariable());
 		});
 	}

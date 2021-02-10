@@ -67,7 +67,7 @@ public class LazyTutorial2 {
 					Arrays.toString(sigmaSeries[2][i]));
 		}
 
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);
 
 		final RandomAccessibleInterval<DoubleType> converted =

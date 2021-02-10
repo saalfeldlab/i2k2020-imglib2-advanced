@@ -27,7 +27,7 @@ public class LazyTutorial3 {
 		final String n5Url = "https://janelia-cosem.s3.amazonaws.com/jrc_hela-2/jrc_hela-2.n5";
 		final String n5Dataset = "/em/fibsem-uint16/s0";
 
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 		final RandomAccessibleInterval<UnsignedShortType> img = N5Utils.openVolatile(n5, n5Dataset);
 
 		final SharedQueue queue = new SharedQueue(Math.max(1, Runtime.getRuntime().availableProcessors() - 1));

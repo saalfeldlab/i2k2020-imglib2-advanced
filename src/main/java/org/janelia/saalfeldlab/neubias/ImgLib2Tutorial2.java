@@ -21,7 +21,7 @@ public class ImgLib2Tutorial2 {
 				2,
 				(x, fx) -> {
 					int i = 0;
-					double v = 0, c = x.getDoublePosition(0), d = x.getDoublePosition(1);
+					double v = 0, c = x.getDoublePosition(0) * 0.001, d = x.getDoublePosition(1) * 0.001;
 					while (i < 64 && v < 4096) {
 						final double e = c * c - d * d;
 						d = 2 * c * d;
@@ -36,7 +36,7 @@ public class ImgLib2Tutorial2 {
 
 		BdvStackSource<IntType> bdv = BdvFunctions.show(
 				juliaSet,
-				Intervals.createMinMax(-1, -1, 1, 1),
+				Intervals.createMinMax(-1000, -1000, 1000, 1000),
 				"Julia set",
 				BdvOptions.options().is2D());
 		bdv.setDisplayRange(0, 64);
@@ -44,7 +44,7 @@ public class ImgLib2Tutorial2 {
 		final RandomAccessibleOnRealRandomAccessible<IntType> juliaSetImg = Views.raster(juliaSet);
 
 		bdv = BdvFunctions.show(
-				Views.interval(juliaSetImg, Intervals.createMinMax(-1, -1, 1, 1)),
+				Views.interval(juliaSetImg, Intervals.createMinMax(-1000, -1000, 1000, 1000)),
 				"Julia set rastered and cropped",
 				BdvOptions.options().is2D().addTo(bdv));
 		bdv.setDisplayRange(0, 64);

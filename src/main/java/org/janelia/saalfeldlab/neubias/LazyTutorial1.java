@@ -51,7 +51,7 @@ public class LazyTutorial1 {
 
 		final SharedQueue queue = new SharedQueue(Math.max(1, Runtime.getRuntime().availableProcessors() - 1));
 
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);
 
 		final double scale = 1.0 / Math.pow(2, scaleIndex);

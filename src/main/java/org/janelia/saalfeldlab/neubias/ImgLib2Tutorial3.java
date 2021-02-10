@@ -54,7 +54,8 @@ public class ImgLib2Tutorial3 {
 				BdvOptions.options().is2D().addTo(bdv));
 		bdv.setDisplayRange(0, 64);
 
-		final RandomAccessibleInterval<IntType> juliaSetRasteredIntervalCached = Caches.cache(juliaSetRasteredInterval, 32, 32);
+		final RandomAccessibleInterval<IntType> juliaSetRasteredIntervalCached =
+				Caches.cache(juliaSetRasteredInterval, 32, 32);
 
 		bdv = BdvFunctions.show(
 				Views.translate(juliaSetRasteredIntervalCached, -1000, -1000),
