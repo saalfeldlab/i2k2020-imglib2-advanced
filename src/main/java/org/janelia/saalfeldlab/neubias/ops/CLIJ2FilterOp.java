@@ -1,10 +1,10 @@
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.janelia.saalfeldlab.i2k2020.util.Util;
+import org.janelia.saalfeldlab.neubias.util.Util;
 
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.converters.implementations.ClearCLBufferToRandomAccessibleIntervalConverter;

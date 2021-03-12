@@ -1,4 +1,4 @@
-package org.janelia.saalfeldlab.i2k2020.util;
+package org.janelia.saalfeldlab.neubias.util;
 
 import static net.imglib2.img.basictypeaccess.AccessFlags.VOLATILE;
 import static net.imglib2.type.PrimitiveType.BYTE;

@@ -1,4 +1,4 @@
-package org.janelia.saalfeldlab.i2k2020.util;
+package org.janelia.saalfeldlab.neubias.util;
 
 import java.io.IOException;
 import java.net.URI;

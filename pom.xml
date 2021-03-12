@@ -17,6 +17,8 @@
 
 	<properties>
 		<enforcer.skip>true</enforcer.skip>
+		
+		<scijava.jvm.version>11</scijava.jvm.version>
 
 		<n5.version>2.4.0</n5.version>
 		<n5-hdf5.version>1.2.0</n5-hdf5.version>
@@ -24,6 +26,8 @@
 		<n5-zarr.version>0.0.6</n5-zarr.version>
 		<n5-jpeg.version>0.0.1-beta1</n5-jpeg.version>
 		<n5-google-cloud.version>3.3.1</n5-google-cloud.version>
+		
+		<jackson-databind.version>2.10.0</jackson-databind.version>
 	</properties>
 
 	<repositories>
@@ -115,6 +119,11 @@
 			<groupId>net.haesleinhuepf</groupId>
 			<artifactId>clij2_</artifactId>
 			<version>2.2.0.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.janelia.saalfeldlab</groupId>
+			<artifactId>n5-universe</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

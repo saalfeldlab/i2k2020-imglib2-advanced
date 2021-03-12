@@ -28,9 +28,10 @@
  * #L%
  */
 
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import net.imglib2.Cursor;
@@ -41,62 +42,38 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 
 /**
- * Absolute Gradient (magintude)
+ * Gradient
  *
- * @author Stephan Preibisch
+ * @author Stephan Saalfeld
  */
-public class AbsoluteGradientCenter<T extends RealType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>>
-{
-	final private ArrayList<RandomAccessible<T>> sourcesA;
-	final private ArrayList<RandomAccessible<T>> sourcesB;
+public class Max<T extends RealType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>> {
 
-	final private int n;
-	final double[] norm;
+	private final ArrayList<RandomAccessible<T>> sources;
 
-	public AbsoluteGradientCenter(final RandomAccessible<T> source, final double[] sigma)
-	{
-		this.n = source.numDimensions();
-		this.sourcesA = new ArrayList<>( n );
-		this.sourcesB = new ArrayList<>( n );
-		this.norm = new double[ n ];
+	public Max(final List<? extends RandomAccessible<T>> sources) {
 
-		for ( int axis = 0; axis < n; ++axis )
-		{
-			final long[] offset = new long[source.numDimensions()];
-			offset[axis] = -1;
-			sourcesA.add( Views.offset(source, offset) );
-			sourcesB.add( Views.translate(source, offset) );
-			this.norm[ axis ] = 2.0 / sigma[ axis ];
-		}
+		this.sources = new ArrayList<>(sources);
 	}
 
 	@Override
-	public void accept(final RandomAccessibleInterval<T> output)
-	{
-		final Cursor<T> c = Views.flatIterable(output).cursor();
+	public void accept(final RandomAccessibleInterval<T> output) {
 
-		final ArrayList<Cursor<T>> as = new ArrayList<>();
-		final ArrayList<Cursor<T>> bs = new ArrayList<>();
-
-		for ( int d = 0; d < n; ++d )
-		{
-			as.add( Views.flatIterable(Views.interval(sourcesA.get( d ), output)).cursor() );
-			bs.add( Views.flatIterable(Views.interval(sourcesB.get( d ), output)).cursor() );
+		final ArrayList<Cursor<T>> cursors = new ArrayList<>();
+		for (final RandomAccessible<T> source : sources) {
+			cursors.add(Views.flatIterable(Views.interval(source, output)).cursor());
 		}
 
-		while (c.hasNext())
-		{
+		final Cursor<T> c = Views.flatIterable(output).cursor();
+
+		while (c.hasNext()) {
+
 			final T t = c.next();
-
-			double sumSquare = 0;
-
-			for ( int d = 0; d < n; ++d )
-			{
-				final double gradient = (bs.get( d ).next().getRealDouble() - as.get( d ).next().getRealDouble()) * norm[ d ];
-				sumSquare += gradient * gradient;
+			for (final Cursor<T> a : cursors) {
+				final T ta = a.next();
+				if (t.compareTo(ta) < 0) {
+					t.set(ta);
+				}
 			}
-
-			t.setReal( Math.sqrt( sumSquare ));
 		}
 	}
 }

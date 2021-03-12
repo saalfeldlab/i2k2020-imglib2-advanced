@@ -28,52 +28,44 @@
  * #L%
  */
 
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.NativeType;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.NumericType;
 import net.imglib2.view.Views;
 
 /**
- * Gradient
+ * Multiply
  *
  * @author Stephan Saalfeld
  */
-public class Max<T extends RealType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>> {
+public class Multiply<T extends NumericType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>> {
 
-	private final ArrayList<RandomAccessible<T>> sources;
+	final private RandomAccessible<? extends T> sourceA;
+	final private RandomAccessible<? extends T> sourceB;
 
-	public Max(final List<? extends RandomAccessible<T>> sources) {
+	public Multiply(final RandomAccessible<T> sourceA, final RandomAccessible<T> sourceB) {
 
-		this.sources = new ArrayList<>(sources);
+		this.sourceA = sourceA;
+		this.sourceB = sourceB;
 	}
 
 	@Override
 	public void accept(final RandomAccessibleInterval<T> output) {
 
-		final ArrayList<Cursor<T>> cursors = new ArrayList<>();
-		for (final RandomAccessible<T> source : sources) {
-			cursors.add(Views.flatIterable(Views.interval(source, output)).cursor());
-		}
-
+		final Cursor<? extends T> a = Views.flatIterable(Views.interval(sourceA, output)).cursor();
+		final Cursor<? extends T> b = Views.flatIterable(Views.interval(sourceB, output)).cursor();
 		final Cursor<T> c = Views.flatIterable(output).cursor();
 
 		while (c.hasNext()) {
-
 			final T t = c.next();
-			for (final Cursor<T> a : cursors) {
-				final T ta = a.next();
-				if (t.compareTo(ta) < 0) {
-					t.set(ta);
-				}
-			}
+			t.set(a.next());
+			t.mul(b.next());
 		}
 	}
 }

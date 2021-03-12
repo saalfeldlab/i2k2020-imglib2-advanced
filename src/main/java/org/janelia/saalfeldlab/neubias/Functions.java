@@ -1,4 +1,4 @@
-package org.janelia.saalfeldlab.i2k2020;
+package org.janelia.saalfeldlab.neubias;
 
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;

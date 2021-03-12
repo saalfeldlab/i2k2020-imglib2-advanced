@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
 import java.util.function.Consumer;
 
@@ -36,7 +36,7 @@ import net.imglib2.Cursor;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.NativeType;
-import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.NumericType;
 import net.imglib2.view.Views;
 
 /**
@@ -44,19 +44,17 @@ import net.imglib2.view.Views;
  *
  * @author Stephan Saalfeld
  */
-public class GradientCenter<T extends RealType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>> {
+public class GradientForward<T extends NumericType<T> & NativeType<T>> implements Consumer<RandomAccessibleInterval<T>> {
 
 	final private RandomAccessible<T> sourceA;
 	final private RandomAccessible<T> sourceB;
-	final double norm;
 
-	public GradientCenter(final RandomAccessible<T> source, final int axis, final double sigma) {
+	public GradientForward(final RandomAccessible<T> source, final int axis) {
 
 		final long[] offset = new long[source.numDimensions()];
 		offset[axis] = -1;
-		sourceA = Views.offset(source, offset);
+		sourceA = source;
 		sourceB = Views.translate(source, offset);
-		norm = 2.0 / sigma;
 	}
 
 	@Override
@@ -68,7 +66,8 @@ public class GradientCenter<T extends RealType<T> & NativeType<T>> implements Co
 
 		while (c.hasNext()) {
 			final T t = c.next();
-			t.setReal((b.next().getRealDouble() - a.next().getRealDouble()) * norm);
+			t.set(b.next());
+			t.sub(a.next());
 		}
 	}
 }

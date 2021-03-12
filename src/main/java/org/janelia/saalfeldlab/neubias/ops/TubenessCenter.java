@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
 import java.util.function.Consumer;
 

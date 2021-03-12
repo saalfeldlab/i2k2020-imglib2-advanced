@@ -1,19 +1,19 @@
-package org.janelia.saalfeldlab.i2k2020;
+package org.janelia.saalfeldlab.neubias;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-import org.janelia.saalfeldlab.i2k2020.ops.GradientCenter;
-import org.janelia.saalfeldlab.i2k2020.ops.Max;
-import org.janelia.saalfeldlab.i2k2020.ops.Multiply;
-import org.janelia.saalfeldlab.i2k2020.ops.SimpleGaussRA;
-import org.janelia.saalfeldlab.i2k2020.ops.TubenessCenter;
-import org.janelia.saalfeldlab.i2k2020.util.Lazy;
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.neubias.ops.GradientCenter;
+import org.janelia.saalfeldlab.neubias.ops.Max;
+import org.janelia.saalfeldlab.neubias.ops.Multiply;
+import org.janelia.saalfeldlab.neubias.ops.SimpleGaussRA;
+import org.janelia.saalfeldlab.neubias.ops.TubenessCenter;
+import org.janelia.saalfeldlab.neubias.util.Lazy;
+import org.janelia.saalfeldlab.neubias.util.N5Factory;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;

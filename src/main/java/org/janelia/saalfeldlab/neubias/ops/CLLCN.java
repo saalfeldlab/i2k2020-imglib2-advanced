@@ -1,4 +1,4 @@
-package org.janelia.saalfeldlab.i2k2020.ops;
+package org.janelia.saalfeldlab.neubias.ops;
 
 import ij.process.FloatProcessor;
 import mpicbg.ij.integral.BlockStatistics;
