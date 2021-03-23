@@ -122,27 +122,27 @@ public class SparkTutorial1 implements Callable<Void> {
 			final int blockRadius,
 			final JavaRDD<long[][]> rddGrid) throws IOException {
 
-		final N5Reader n5 = Singleton.get(
-				n5Url + ".reader",
-				() -> new N5Factory().openReader(n5Url));
+//		final N5Reader n5 = Singleton.get(
+//				n5Url + ".reader",
+//				() -> (N5Reader)new N5Factory().openReader(n5Url));
 
 //		final N5Reader n5 = new N5Factory().openReader(n5Url);
 
-		final RandomAccessibleInterval<T> img = Singleton.get(
-				n5Url + ":" + n5Dataset,
-				() -> N5Utils.open(n5, n5Dataset));
+//		final RandomAccessibleInterval<T> img = Singleton.get(
+//				n5Url + ":" + n5Dataset,
+//				() -> (RandomAccessibleInterval<T>)N5Utils.open(n5, n5Dataset));
 
 		rddGrid.foreach(gridBlock -> {
 
 			final N5Reader n5 = Singleton.get(
 					n5Url + ".reader",
-					() -> new N5Factory().openReader(n5Url));
+					() -> (N5Reader)new N5Factory().openReader(n5Url));
 
 //			final N5Reader n5 = new N5Factory().openReader(n5Url);
 
 			final RandomAccessibleInterval<T> img = Singleton.get(
 					n5Url + ":" + n5Dataset,
-					() -> N5Utils.open(n5, n5Dataset));
+					() -> (RandomAccessibleInterval<T>)N5Utils.open(n5, n5Dataset));
 
 //			final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
 
@@ -181,7 +181,7 @@ public class SparkTutorial1 implements Callable<Void> {
 
 			final RandomAccessibleInterval<T> cllcned = Singleton.get(
 					"cllcned",
-					() -> Lazy.generate(
+					() -> (RandomAccessibleInterval<T>)Lazy.generate(
 						img,
 						new int[] {256, 256, 32},
 						img.randomAccess().get().createVariable(),
