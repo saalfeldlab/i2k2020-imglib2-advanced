@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>29.2.1</version>
+		<version>30.0.0</version>
 	</parent>
 
 	<groupId>org.janelia.saalfeldlab</groupId>
@@ -18,17 +18,9 @@
 	<properties>
 		<enforcer.skip>true</enforcer.skip>
 
-		<!-- TODO remove when pom-scijava-base is updated -->
-		<scijava.jvm.version>8</scijava.jvm.version>
-		<scijava.release.version>8</scijava.release.version>
-		<scijava.jvm.build.version>[1.8.0-101,)</scijava.jvm.build.version>
-		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
-
-		<n5.version>2.3.0</n5.version>
-		<n5-imglib2.version>3.5.1</n5-imglib2.version>
+		<n5.version>2.4.0</n5.version>
 		<n5-hdf5.version>1.2.0</n5-hdf5.version>
 		<n5-aws-s3.version>3.2.0</n5-aws-s3.version>
-		<n5-blosc.version>1.1.0</n5-blosc.version>
 		<n5-zarr.version>0.0.6</n5-zarr.version>
 		<n5-jpeg.version>0.0.1-beta1</n5-jpeg.version>
 		<n5-google-cloud.version>3.3.1</n5-google-cloud.version>
@@ -118,7 +110,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.12.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.haesleinhuepf</groupId>
@@ -128,15 +119,6 @@
 	</dependencies>
 
 	<profiles>
-		<profile>
-			<id>java-9</id>
-			<activation>
-				<jdk>[9,)</jdk>
-			</activation>
-			<properties>
-				<maven.compiler.release>${scijava.jvm.version}</maven.compiler.release>
-			</properties>
-		</profile>
 		<profile>
 			<id>spark-provided</id>
 			<activation>
