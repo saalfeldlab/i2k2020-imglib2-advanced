@@ -11,9 +11,9 @@ import org.janelia.saalfeldlab.i2k2020.ops.Multiply;
 import org.janelia.saalfeldlab.i2k2020.ops.SimpleGaussRA;
 import org.janelia.saalfeldlab.i2k2020.ops.TubenessCenter;
 import org.janelia.saalfeldlab.i2k2020.util.Lazy;
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
@@ -118,7 +118,7 @@ public class LazyTutorial2 implements Callable<Void> {
 					Arrays.toString(sigmaSeries[2][i]));
 		}
 
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);
 
 		final RandomAccessibleInterval<DoubleType> converted =

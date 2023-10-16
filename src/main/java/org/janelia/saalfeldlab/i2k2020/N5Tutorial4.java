@@ -1,12 +1,13 @@
 package org.janelia.saalfeldlab.i2k2020;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 
 import org.janelia.saalfeldlab.i2k2020.util.Caches;
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
@@ -71,11 +72,12 @@ public class N5Tutorial4 implements Callable<Void> {
 	 *
 	 * @param <T>
 	 * @throws IOException
+	 * @throws URISyntaxException
 	 */
-	private final <T extends NativeType<T> & RealType<T>> void run() throws IOException {
+	private final <T extends NativeType<T> & RealType<T>> void run() throws IOException, URISyntaxException {
 
-		/* make an N5 reader, we start with a public container on AWS S3 */
-		final N5Reader n5 = N5Factory.openAWSS3Reader(n5Url);
+		/* make an N5 reader */
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 
 		/* open the dataset, use volatile access */
 		final RandomAccessibleInterval<T> img = N5Utils.openVolatile(n5, n5Dataset);

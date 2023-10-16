@@ -39,11 +39,9 @@ import net.imglib2.Localizable;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.Sampler;
 import net.imglib2.algorithm.gauss3.Gauss3;
 import net.imglib2.algorithm.gauss3.SeparableSymmetricConvolution;
 import net.imglib2.exception.IncompatibleTypeException;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
@@ -105,7 +103,7 @@ public class WeightedGaussRA<T extends RealType<T> & NativeType<T>> implements C
 			while ( o.hasNext() )
 			{
 				final double weight = w.next().getRealDouble();
-	
+
 				if ( weight == 0 )
 				{
 					o.next().set( i.next() );
@@ -153,7 +151,7 @@ public class WeightedGaussRA<T extends RealType<T> & NativeType<T>> implements C
 		}
 
 		@Override
-		public RandomAccess< T > randomAccess( Interval interval )
+		public RandomAccess< T > randomAccess( final Interval interval )
 		{
 			return randomAccess();
 		}
@@ -278,15 +276,9 @@ public class WeightedGaussRA<T extends RealType<T> & NativeType<T>> implements C
 		}
 
 		@Override
-		public Sampler< T > copy()
+		public  WeightedRandomAccess< T > copy()
 		{
-			return copyRandomAccess();
-		}
-
-		@Override
-		public RandomAccess< T > copyRandomAccess()
-		{
-			return new WeightedRandomAccess<>( source.copyRandomAccess(), weight.copyRandomAccess(), type.createVariable() );
+			return new WeightedRandomAccess<>( source.copy(), weight.copy(), type.createVariable() );
 		}
 	}
 }

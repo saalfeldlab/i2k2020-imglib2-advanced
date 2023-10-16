@@ -4,14 +4,14 @@ import java.io.IOException;
 
 import org.janelia.saalfeldlab.i2k2020.ops.CLIJ2FilterOp;
 import org.janelia.saalfeldlab.i2k2020.util.Lazy;
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
+import bdv.cache.SharedQueue;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
 import bdv.util.BdvStackSource;
-import bdv.util.volatiles.SharedQueue;
 import bdv.util.volatiles.VolatileViews;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.converter.Converters;
@@ -29,7 +29,7 @@ public class LazyTutorial3 {
 
 	public static final void main(final String... args) throws IOException {
 
-		final N5Reader n5 = N5Factory.openReader("https://janelia-cosem.s3.amazonaws.com/jrc_hela-2/jrc_hela-2.n5");
+		final N5Reader n5 = new N5Factory().openReader("https://janelia-cosem.s3.amazonaws.com/jrc_hela-2/jrc_hela-2.n5");
 		final RandomAccessibleInterval<UnsignedShortType> img = N5Utils.openVolatile(n5, "/em/fibsem-uint16/s0");
 
 		final SharedQueue queue = new SharedQueue(Math.max(1, Runtime.getRuntime().availableProcessors() - 1));

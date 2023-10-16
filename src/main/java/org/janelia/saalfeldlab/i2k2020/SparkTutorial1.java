@@ -11,11 +11,11 @@ import org.janelia.saalfeldlab.i2k2020.ops.CLLCN;
 import org.janelia.saalfeldlab.i2k2020.ops.ImageJStackOp;
 import org.janelia.saalfeldlab.i2k2020.util.Grid;
 import org.janelia.saalfeldlab.i2k2020.util.Lazy;
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.DatasetAttributes;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.N5Writer;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.basictypeaccess.AccessFlags;
@@ -88,11 +88,11 @@ public class SparkTutorial1 implements Callable<Void> {
 		final JavaSparkContext sc = new JavaSparkContext(conf);
 
 		/* get some data about the input */
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 		final DatasetAttributes attributes = n5.getDatasetAttributes(n5Dataset);
 
 		/* create the output */
-		final N5Writer n5Writer = N5Factory.openWriter(n5OutUrl);
+		final N5Writer n5Writer = new N5Factory().openWriter(n5OutUrl);
 		n5Writer.createDataset(n5OutDataset, attributes);
 
 		/* create the grid for parallelization */
@@ -123,7 +123,7 @@ public class SparkTutorial1 implements Callable<Void> {
 
 		rddGrid.foreach(gridBlock -> {
 
-			final N5Reader n5 = N5Factory.openReader(n5Url);
+			final N5Reader n5 = new N5Factory().openReader(n5Url);
 			final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
 
 			/* Use the new ImageJ plugin contrast limited local contrast normalization */
@@ -144,7 +144,7 @@ public class SparkTutorial1 implements Callable<Void> {
 			/* crop the block of interest */
 			final IntervalView<T> block = Views.offsetInterval(cllcned, gridBlock[0], gridBlock[1]);
 
-			final N5Writer n5Writer = N5Factory.openWriter(n5OutUrl);
+			final N5Writer n5Writer = new N5Factory().openWriter(n5OutUrl);
 			N5Utils.saveNonEmptyBlock(block, n5Writer, n5OutDataset, gridBlock[2], Util.getTypeFromInterval(img).createVariable());
 		});
 	}

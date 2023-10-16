@@ -3,12 +3,12 @@ package org.janelia.saalfeldlab.i2k2020;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
+import bdv.cache.SharedQueue;
 import bdv.util.BdvFunctions;
-import bdv.util.volatiles.SharedQueue;
 import bdv.util.volatiles.VolatileViews;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.Volatile;
@@ -69,8 +69,8 @@ public class N5Tutorial3 implements Callable<Void> {
 	 */
 	private final <T extends NativeType<T>> void run() throws IOException {
 
-		/* make an N5 reader, we start with a public container on AWS S3 */
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		/* make an N5 reader */
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 
 		/* open dataset */
 //		final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);

@@ -6,12 +6,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.janelia.saalfeldlab.i2k2020.util.N5Factory;
 import org.janelia.saalfeldlab.i2k2020.util.Timer;
 import org.janelia.saalfeldlab.n5.DatasetAttributes;
 import org.janelia.saalfeldlab.n5.N5Reader;
 import org.janelia.saalfeldlab.n5.N5Writer;
 import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
+import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.NativeType;
@@ -98,8 +98,8 @@ public class N5Tutorial2 implements Callable<Void> {
 
 		final Timer timer = new Timer();
 
-		/* make an N5 reader, we start with a public container on AWS S3 */
-		final N5Reader n5 = N5Factory.openReader(n5Url);
+		/* make an N5 reader */
+		final N5Reader n5 = new N5Factory().openReader(n5Url);
 
 		/* open the dataset */
 		final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
@@ -110,10 +110,15 @@ public class N5Tutorial2 implements Callable<Void> {
 //		final ExecutorService exec = Executors.newCachedThreadPool();
 		final ExecutorService exec = Executors.newFixedThreadPool(10);
 
+		/* create an N5 factory with reasonable defaults */
+		final N5Factory n5Factory = new N5Factory()
+				.hdf5DefaultBlockSize(attributes.getBlockSize())
+				.hdf5OverrideBlockSize(true);
+
 		/* save this dataset into a filsystem N5 container */
 		System.out.println("Copy to N5 filesystem...");
 		timer.start();
-		final N5Writer n5Out = N5Factory.openFSWriter(n5OutUrl + ".n5");
+		final N5Writer n5Out = n5Factory.openFSWriter(n5OutUrl + ".n5");
 //		N5Utils.save(crop, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
 		N5Utils.save(crop, n5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
 		System.out.println("...done in " + timer.stop() + "ms.");
@@ -122,7 +127,7 @@ public class N5Tutorial2 implements Callable<Void> {
 		/* save this dataset into a filsystem Zarr container */
 		System.out.println("Copy to Zarr filesystem...");
 		timer.start();
-		final N5Writer zarrOut = N5Factory.openZarrWriter(n5OutUrl + ".zarr");
+		final N5Writer zarrOut = n5Factory.openZarrWriter(n5OutUrl + ".zarr");
 //		N5Utils.save(crop, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
 		N5Utils.save(crop, zarrOut, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
 		System.out.println("...done in " + timer.stop() + "ms.");
@@ -131,7 +136,7 @@ public class N5Tutorial2 implements Callable<Void> {
 		/* save this dataset into an HDF5 file */
 		System.out.println("Copy to HDF5...");
 		timer.start();
-		final N5Writer hdf5Out = N5Factory.openHDF5Writer(n5OutUrl + ".hdf5", attributes.getBlockSize());
+		final N5Writer hdf5Out = n5Factory.openHDF5Writer(n5OutUrl + ".hdf5");
 		N5Utils.save(crop, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression());
 //		N5Utils.save(crop, hdf5Out, n5Dataset, attributes.getBlockSize(), attributes.getCompression(), exec);
 		System.out.println("...done in " + timer.stop() + "ms.");
