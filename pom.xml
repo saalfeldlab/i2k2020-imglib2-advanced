@@ -95,6 +95,11 @@
 			<groupId>net.haesleinhuepf</groupId>
 			<artifactId>clij2_</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.janelia.saalfeldlab</groupId>
+			<artifactId>n5-spark</artifactId>
+			<version>3.7.2</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

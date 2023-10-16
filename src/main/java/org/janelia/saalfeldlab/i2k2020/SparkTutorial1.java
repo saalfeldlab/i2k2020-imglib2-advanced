@@ -18,9 +18,11 @@ import org.janelia.saalfeldlab.n5.imglib2.N5Utils;
 import org.janelia.saalfeldlab.n5.universe.N5Factory;
 
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.converter.Converters;
 import net.imglib2.img.basictypeaccess.AccessFlags;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Util;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
@@ -125,11 +127,20 @@ public class SparkTutorial1 implements Callable<Void> {
 
 			final N5Reader n5 = new N5Factory().openReader(n5Url);
 			final RandomAccessibleInterval<T> img = N5Utils.open(n5, n5Dataset);
+			
+			T type = Util.getTypeFromInterval( img );
+			
+			RandomAccessibleInterval< T > imgConv = Converters.convert(
+					img, 
+					(a, b) -> {
+						final double v = a.getRealDouble(); if (v < 18000) b.setReal(27000); else b.setReal(v);
+						},
+					type );
 
 			/* Use the new ImageJ plugin contrast limited local contrast normalization */
 			final ImageJStackOp<T> cllcn =
 					new ImageJStackOp<>(
-							Views.extendZero(img),
+							Views.extendZero( imgConv ),
 							(fp) -> new CLLCN(fp).run(blockRadius, blockRadius, 3f, 10, 0.5f, true, true, true),
 							blockRadius,
 							0,
